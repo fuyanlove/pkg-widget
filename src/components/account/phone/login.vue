@@ -1,4 +1,4 @@
-<!-- 公共组件 邮件地址注册 -->
+<!-- 公共组件 手机注册 -->
 <template>
     <div class="m-card m-login-card">
         <card-header :title="$t('common.login')">
@@ -17,13 +17,16 @@
                 :rules="rules"
                 size="large"
             >
-                <el-form-item prop="email">
+                <el-form-item prop="phone">
                     <template #label>
                         <div class="m-card-form-label">
-                            <span>{{ $t("account.email.address") }}</span>
+                            <span>{{ $t("account.phone.number") }}</span>
                         </div>
                     </template>
-                    <el-input v-model.trim="form.email" size="large"> </el-input>
+                    <div class="m-card-form-value">
+                        <phone-code-select v-model="phoneCode" size="large" />
+                        <el-input v-model.trim="form.phone" size="large"> </el-input>
+                    </div>
                 </el-form-item>
                 <el-form-item prop="password">
                     <template #label>
@@ -69,15 +72,17 @@
 </template>
 
 <script>
-import { loginByEmail } from "../../../service/email";
+import { loginByPhone } from "../../../service/phone";
 import CardHeader from "../../common/card-header.vue";
 import User from "@iruxu/pkg-common/utils/user";
 import LangSelect from "../../common/lang-select.vue";
+import PhoneCodeSelect from "../../common/phone-code-select.vue";
 export default {
     name: "EmailLogin",
     components: {
         CardHeader,
         LangSelect,
+        PhoneCodeSelect,
     },
     props: {
         app: {
@@ -100,10 +105,11 @@ export default {
                 password: "",
             },
 
+            phoneCode: 86,
+
             rules: {
-                email: [
-                    { required: true, message: this.$t("account.email.addressPlaceholder"), trigger: "blur" },
-                    { type: "email", message: this.$t("account.email.addressError"), trigger: ["blur", "change"] },
+                phone: [
+                    { required: true, message: this.$t("account.phone.numberPlaceholder"), trigger: "blur" },
                 ],
                 password: [
                     { required: true, message: this.$t("common.passwordPlaceholder"), trigger: "blur" },
@@ -120,9 +126,6 @@ export default {
         };
     },
     computed: {
-        canSubmit() {
-            return this.form.email && this.form.password;
-        },
         lang() {
             return User.getLocale();
         },
@@ -138,7 +141,11 @@ export default {
             this.error = "";
             this.$refs.loginForm.validate(async (valid) => {
                 if (valid) {
-                    loginByEmail(this.form, { app: this.app })
+                    const data = {
+                        phone: `+${this.phoneCode}${this.form.phone}`,
+                        password: this.form.password,
+                    }
+                    loginByPhone(data, { app: this.app })
                         .then((res) => {
                             this.$message.success(this.$t("common.loginSuccess"));
                             this.success = true;
@@ -149,7 +156,7 @@ export default {
                         })
                         .catch((err) => {
                             this.success = false;
-                            this.error = err.data?.msg || this.$t("account.email.loginFailed");
+                            this.error = err.data?.msg || this.$t("account.phone.loginFailedWithPwd");
                         });
                 }
             });

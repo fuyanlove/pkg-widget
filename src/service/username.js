@@ -1,4 +1,4 @@
-import { $uc } from "@/utils/api";
+import { $uc } from "@iruxu/pkg-common/utils/api";
 
 // ============ 用户名相关 ============
 /**

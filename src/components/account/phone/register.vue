@@ -17,34 +17,21 @@
                 status-icon
                 label-position="top"
             >
-                <!-- <el-form-item prop="nickname">
+                <el-form-item prop="phone">
                     <template #label>
                         <div class="m-card-form-label">
-                            <span>{{ $t("account.email.nickname") }}<i class="is-required">*</i></span>
+                            <span>{{ $t("account.phone.number") }}<i class="is-required">*</i></span>
                         </div>
                     </template>
-                    <el-input v-model.trim="form.nickname" size="large" :maxlength="20"> </el-input>
-                </el-form-item> -->
-                <!-- <el-form-item prop="invite_code">
-                    <template #label>
-                        <div class="m-card-form-label">
-                            <span>{{ $t("account.email.invite_code") }}</span>
-                        </div>
-                    </template>
-                    <el-input v-model.trim="form.invite_code" size="large"> </el-input>
-                </el-form-item> -->
-                <el-form-item prop="email">
-                    <template #label>
-                        <div class="m-card-form-label">
-                            <span>{{ $t("account.email.address") }}<i class="is-required">*</i></span>
-                        </div>
-                    </template>
-                    <el-input v-model.trim="form.email" size="large"> </el-input>
+                    <div class="m-card-form-value">
+                        <phone-code-select v-model="phoneCode" size="large" />
+                        <el-input v-model.trim="form.phone" size="large"> </el-input>
+                    </div>
                 </el-form-item>
                 <el-form-item prop="code" class="u-code">
                     <template #label>
                         <div class="m-card-form-label">
-                            <span>{{ $t("account.email.code") }}<i class="is-required">*</i></span>
+                            <span>{{ $t("account.phone.code") }}<i class="is-required">*</i></span>
                         </div>
                     </template>
                     <el-input v-model.trim="form.code" size="large"> </el-input>
@@ -52,7 +39,7 @@
                         class="u-btn-send"
                         size="small"
                         @click="senCode"
-                        :disabled="interval > 0 || !emailChecked"
+                        :disabled="interval > 0 || !phoneChecked"
                         >{{ $t("account.email.send") }}<span v-if="interval">({{ interval }}s)</span></el-button
                     >
                 </el-form-item>
@@ -120,13 +107,14 @@
 </template>
 
 <script>
-import { checkEmail, registerByEmail, activeByEmail } from "../../../service/email";
+import { checkPhone, registerByPhone, checkPhoneCode, activeByPhone } from "../../../service/phone";
 import CardHeader from "../../common/card-header.vue";
 import User from "@iruxu/pkg-common/utils/user";
 import LangSelect from "../../common/lang-select.vue";
+import PhoneCodeSelect from "../../common/phone-code-select.vue";
 
 export default {
-    name: "EmailRegister",
+    name: "PhoneRegister",
     props: {
         app: {
             type: String,
@@ -140,27 +128,23 @@ export default {
     components: {
         CardHeader,
         LangSelect,
+        PhoneCodeSelect,
     },
     data() {
         return {
             form: {
-                // nickname: "",
-                email: "",
+                phone: "",
                 password: "",
                 password1: "",
                 lang: "",
                 code: "",
-                // invite_code: "",
             },
 
+            phoneCode: 86,
+
             rules: {
-                // nickname: [
-                //     { required: true, message: this.$t("account.email.nicknamePlaceholder"), trigger: "blur" },
-                //     { validator: this.checkNickname, trigger: "blur" },
-                // ],
-                email: [
-                    { required: true, message: this.$t("account.email.addressPlaceholder"), trigger: "blur" },
-                    { type: "email", message: this.$t("account.email.addressError"), trigger: ["blur", "change"] },
+                phone: [
+                    { required: true, message: this.$t("account.phone.numberPlaceholder"), trigger: "blur" },
                     { validator: this.check, trigger: "blur" },
                 ],
                 password: [
@@ -186,18 +170,13 @@ export default {
             agreement: false,
 
             success: null,
-            emailChecked: false,
+            phoneChecked: false,
 
             terms: "/doc/terms",
 
             interval: 0,
             timer: null,
         };
-    },
-    computed: {
-        canSubmit() {
-            return this.form.email && this.form.password && this.agreement;
-        },
     },
     mounted() {
         // 生成特征码
@@ -209,14 +188,15 @@ export default {
     methods: {
         async check(rule, value, callback) {
             if (!value) {
-                callback(new Error(this.$t("account.email.addressPlaceholder")));
+                callback(new Error(this.$t("account.phone.numberPlaceholder")));
             } else {
-                const res = await checkEmail(value);
+                const phone = `+${this.phoneCode}${value}`;
+                const res = await checkPhone(phone);
                 if (res) {
-                    callback(new Error(this.$t("account.email.emailRegistered")));
+                    callback(new Error(this.$t("account.phone.numberError")));
                     return;
                 }
-                this.emailChecked = true;
+                this.phoneChecked = true;
                 callback();
             }
         },
@@ -232,12 +212,12 @@ export default {
         },
         // 发送验证码
         senCode() {
-            if (!this.form.email) {
-                this.$refs.registerForm.validateField("email");
+            if (!this.form.phone) {
                 return;
             }
-            registerByEmail({ email: this.form.email }, { app: this.app }).then(() => {
-                this.$message.success(this.$t("account.email.sendSuccess"));
+            const phone = `+${this.phoneCode}${this.form.phone}`;
+            registerByPhone({ phone: phone }, { app: this.app }).then(() => {
+                this.$message.success(this.$t("account.phone.sendSuccess"));
                 this.interval = 60;
                 this.timer = setInterval(() => {
                     this.interval--;
@@ -250,26 +230,30 @@ export default {
         onRegister() {
             this.$refs.registerForm.validate(async (valid) => {
                 if (valid) {
-                    const data = {
-                        lang: this.form.lang,
-                        email: this.form.email,
-                        password: this.form.password,
-                        // invite_code: this.form.invite_code,
-                        code: this.form.code,
-                        // nickname: this.form.nickname,
-                    };
-                    activeByEmail(data, { app: this.app })
-                        .then(() => {
-                            this.success = true;
-                        })
-                        .catch(() => {
-                            this.success = false;
-                        });
+
+                    // 检测验证码
+                    const phone = `+${this.phoneCode}${this.form.phone}`;
+                    checkPhoneCode({ phone, code: this.form.code }).then(() => {
+                        const data = {
+                            lang: this.form.lang,
+                            phone: phone,
+                            password: this.form.password,
+                            code: this.form.code,
+                        };
+                        activeByPhone(data, { app: this.app })
+                            .then(() => {
+                                this.success = true;
+                            })
+                            .catch(() => {
+                                this.success = false;
+                            });
+                    })
+
                 }
             });
         },
         goLogin() {
-            this.$emit("toEmailLogin");
+            location.href = this.loginLink;
         },
         onBack() {
             this.success = null;

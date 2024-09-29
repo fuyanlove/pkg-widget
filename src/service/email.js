@@ -17,10 +17,9 @@ export async function checkEmail(email) {
 }
 
 /**
- * 注册账号 - 邮箱注册
+ * 注册账号 - 邮箱注册 发送验证码
  * @param {Object} data
  * @param {String} data.email 邮箱
- * @param {String} data.password 密码
  * @param {Object} params
  * @param {String} params.app 应用标识
  * @returns

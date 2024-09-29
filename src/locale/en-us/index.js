@@ -1,9 +1,7 @@
 import common from "./common";
-import email from "./email";
-import username from "./username";
+import account from "./account";
 
 export default {
     common,
-    email,
-    username,
+    account,
 };

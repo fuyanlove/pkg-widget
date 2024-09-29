@@ -18,6 +18,8 @@ export default {
     passwordError2: "两次输入密码不一致",
     read: "我已阅读并同意",
     terms: "服务条款",
+    jump: "即将跳转",
+    backToHome: "返回首页",
 
     // Route Name
     dashboard: "个人中心",

@@ -1,5 +1,5 @@
 <template>
-    <div class="w-select c-lang-select">
+    <div class="c-lang-select">
         <div class="u-select-label"><span class="fi" :class="flag"></span></div>
         <el-select class="u-select" v-model="current" popper-class="c-lang-select__pop" @change="onLangChange">
             <el-option v-for="item in languages" :key="item.langCode" :label="item.name" :value="item.langCode">
@@ -59,18 +59,38 @@ export default {
 
 <style lang="less">
 .c-lang-select {
+    position: relative;
+    .flex;
+    align-items: center;
     .u-select-label {
+        background-color: #f5f7fa;
+        color: #909399;
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         height: 24px;
         line-height: 20px;
         padding: 16px 12px;
+        border-radius: 4px;
+        white-space: nowrap;
+        border-right: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        box-shadow: 1px 0 0 0 #dcdfe6 inset, 0 1px 0 0 #dcdfe6 inset, 0 -1px 0 0 #dcdfe6 inset;
+        font-size: 14px;
+        box-sizing: border-box;
     }
     .el-select {
-        width: 120px;
         .el-input__wrapper,
         .el-select__wrapper {
+            width: 120px;
             height: 24px;
             line-height: 20px;
-            min-width: auto;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            box-sizing: border-box;
+            box-shadow: 0 1px 0 0 #dcdfe6 inset, 0 -1px 0 0 #dcdfe6 inset, 0 0 0 1px #dcdfe6 inset;
         }
     }
 }

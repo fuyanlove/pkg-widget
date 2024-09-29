@@ -15,6 +15,4 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component);
 }
 
-import "./assets/css/app.less";
-
 app.mount('#app')
