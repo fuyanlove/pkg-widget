@@ -60,42 +60,21 @@
                     <el-input v-model.trim="form.password1" type="password" size="large" show-password> </el-input>
                 </el-form-item>
             </el-form>
-            <div class="u-terms">
-                <el-checkbox v-model="agreement" class="u-checkbox"
-                    >{{ $t("common.read") }}
-                    <a :href="terms" target="_blank">《{{ $t("common.terms") }}》 </a>
-                </el-checkbox>
-            </div>
-            <el-button class="u-btn u-submit" type="primary" @click="onResetPassword">{{ $t("common.register") }}</el-button>
+            <el-button class="u-btn u-submit u-reset-submit" type="primary" @click="onResetPassword">{{ $t("account.phone.resetPassword") }}</el-button>
         </div>
 
         <main class="m-card-main" v-if="success == true">
             <el-alert
                 class="m-alert"
-                :title="$t('account.phone.registerSuccess')"
+                :title="$t('account.phone.resetSuccess')"
                 type="success"
-                :description="$t('account.phone.registerSuccessDesc')"
+                :description="$t('account.phone.resetSuccessDesc')"
                 show-icon
                 :closable="false"
             >
             </el-alert>
             <el-button size="large" class="u-btn u-back" type="primary" @click="goLogin">{{
                 $t("common.login")
-            }}</el-button>
-        </main>
-
-        <main class="m-card-main" v-if="success == false">
-            <el-alert
-                class="m-alert"
-                :title="$t('account.phone.registerFailed')"
-                type="error"
-                :description="$t('account.phone.registerFailedDesc')"
-                show-icon
-                :closable="false"
-            >
-            </el-alert>
-            <el-button size="large" class="u-btn u-back" type="primary" @click="onBack">{{
-                $t("common.back")
             }}</el-button>
         </main>
     </div>
@@ -115,7 +94,7 @@ import PhoneCodeSelect from "../../common/phone-code-select.vue";
 import { parsePhoneNumberFromString } from "libphonenumber-js"
 
 export default {
-    name: "PhoneRegister",
+    name: "PhoneResetPassword",
     props: {
         app: {
             type: String,
@@ -178,8 +157,6 @@ export default {
                     },
                 ],
             },
-
-            agreement: false,
 
             success: null,
             phoneChecked: false,
@@ -250,3 +227,7 @@ export default {
     },
 };
 </script>
+
+<style lang="">
+
+</style>

@@ -62,7 +62,7 @@
             </el-tab-pane>
             <el-tab-pane label="PhoneResetPassword" name="sixth">
                 <div
-                    class="p-account p-account-phone p-account-phone--login"
+                    class="p-account p-account-phone p-account-phone--reset"
                 >
                     <el-row class="m-container" justify="center">
                         <div class="m-login">

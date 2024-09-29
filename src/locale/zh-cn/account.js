@@ -81,5 +81,7 @@ export default {
 
         // Reset
         resetPassword: "重置密码",
+        resetSuccess: "重置成功",
+        resetSuccessDesc: "您的密码已重置成功",
     },
 };

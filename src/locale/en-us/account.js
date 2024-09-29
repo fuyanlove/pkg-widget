@@ -85,5 +85,7 @@ export default {
 
         // Reset
         resetPassword: "Reset Password",
+        resetSuccess: "Reset Success",
+        resetSuccessDesc: "Your password has been reset successfully",
     },
 };
