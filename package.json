@@ -1,6 +1,6 @@
 {
     "name": "@iruxu/pkg-widget",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "type": "module",
     "scripts": {
         "dev": "vite",
@@ -15,6 +15,7 @@
         "element-plus": "^2.8.4",
         "flag-icons": "^7.2.3",
         "intl-tel-input": "^24.5.0",
+        "libphonenumber-js": "^1.11.9",
         "vue": "^3.4.37",
         "vue-i18n": "^9.14.1"
     },

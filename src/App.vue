@@ -48,6 +48,18 @@
                     </el-row>
                 </div>
             </el-tab-pane>
+            <el-tab-pane label="PhoneCodeLogin" name="fifth">
+                <div
+                    class="p-account p-account-phone p-account-phone--login"
+                >
+                    <el-row class="m-container" justify="center">
+                        <div class="m-login">
+                            <logo :app="app" />
+                            <PhoneCodeLogin :app="app" />
+                        </div>
+                    </el-row>
+                </div>
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>
@@ -57,6 +69,7 @@ import EmailLogin from "./components/account/email/login.vue";
 import EmailRegister from "./components/account/email/register.vue";
 import PhoneRegister from "./components/account/phone/register.vue";
 import PhoneLogin from "./components/account/phone/login.vue";
+import PhoneCodeLogin from "./components/account/phone/code-login.vue";
 import Logo from "./components/common/logo.vue";
 export default {
     name: "App",
@@ -66,6 +79,7 @@ export default {
         Logo,
         PhoneRegister,
         PhoneLogin,
+        PhoneCodeLogin,
     },
     data() {
         return {
