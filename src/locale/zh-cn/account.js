@@ -70,8 +70,16 @@ export default {
         // UI Messages
         send: "发送验证码",
         sendSuccess: "发送成功",
+        registerSuccess: "注册成功",
+        registerSuccessDesc: "恭喜，您现在已经是「RX星球」的一员啦！",
+
+        registerFailed: "注册失败",
+        registerFailedDesc: "请检查提交信息是否正确，或稍后再试",
 
         // Login
         loginFailedWithPwd: "登录失败, 请检查手机号和密码",
+
+        // Reset
+        resetPassword: "重置密码",
     },
 };

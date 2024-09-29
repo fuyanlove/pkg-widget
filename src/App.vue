@@ -60,6 +60,18 @@
                     </el-row>
                 </div>
             </el-tab-pane>
+            <el-tab-pane label="PhoneCodeLogin" name="sixth">
+                <div
+                    class="p-account p-account-phone p-account-phone--login"
+                >
+                    <el-row class="m-container" justify="center">
+                        <div class="m-login">
+                            <logo :app="app" />
+                            <PhoneResetPassword :app="app" />
+                        </div>
+                    </el-row>
+                </div>
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>
@@ -70,6 +82,7 @@ import EmailRegister from "./components/account/email/register.vue";
 import PhoneRegister from "./components/account/phone/register.vue";
 import PhoneLogin from "./components/account/phone/login.vue";
 import PhoneCodeLogin from "./components/account/phone/code-login.vue";
+import PhoneResetPassword from "./components/account/phone/reset-password.vue";
 import Logo from "./components/common/logo.vue";
 export default {
     name: "App",
@@ -80,11 +93,12 @@ export default {
         PhoneRegister,
         PhoneLogin,
         PhoneCodeLogin,
+        PhoneResetPassword,
     },
     data() {
         return {
             app: "miipet",
-            active: "third",
+            active: "sixth",
         };
     },
 };

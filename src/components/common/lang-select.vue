@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Lang from "../../assets/data/language.json";
+import Lang from "@iruxu/pkg-common/data/language.json";
 import "flag-icons/css/flag-icons.min.css";
 import User from "@iruxu/pkg-common/utils/user";
 export default {

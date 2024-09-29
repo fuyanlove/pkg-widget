@@ -1,9 +1,5 @@
 import { $uc } from "@iruxu/pkg-common/utils/api";
 
-const options = {
-    domain: import.meta.env.MODE === "development" ? "http://localhost:14150" : "",
-}
-
 // ============ 手机相关 ============
 
 // 注册
@@ -13,7 +9,7 @@ const options = {
  * @returns {Promise}
  */
 export async function checkPhone(phone) {
-    return $uc(options)
+    return $uc()
         .get("/api/uc/user/account/phone/valid", {
             params: {
                 phone,
@@ -31,7 +27,7 @@ export async function checkPhone(phone) {
  * @returns
  */
 export function registerByPhone(data, params) {
-    return $uc(options).post("/api/uc/user/account/phone/register", data, {
+    return $uc().post("/api/uc/user/account/phone/register", data, {
         params,
     });
 }
@@ -44,7 +40,7 @@ export function registerByPhone(data, params) {
  * @returns
  */
 export async function checkPhoneCode(params) {
-    return $uc(options).get("/api/uc/user/account/phone/check-code", {
+    return $uc().get("/api/uc/user/account/phone/check-code", {
         params,
     });
 }
@@ -57,7 +53,7 @@ export async function checkPhoneCode(params) {
  * @param {String} params.app 应用标识
  */
 export function activeByPhone(data, params) {
-    return $uc(options).post("/api/uc/user/account/phone/active", data, {
+    return $uc().post("/api/uc/user/account/phone/active", data, {
         params,
     });
 }
@@ -73,7 +69,7 @@ export function activeByPhone(data, params) {
  * @param {String} params.app 应用标识
  */
 export function bindPhone(data, params) {
-    return $uc(options).post("/api/uc/user/account/phone/bind", data, {
+    return $uc().post("/api/uc/user/account/phone/bind", data, {
         params,
     });
 }
@@ -89,7 +85,7 @@ export function bindPhone(data, params) {
  * @param {String} params.app 应用标识
  */
 export function loginByPhone(data, params) {
-    return $uc(options).post("/api/uc/user/account/phone/login", data, {
+    return $uc().post("/api/uc/user/account/phone/login", data, {
         params,
     });
 }
@@ -102,7 +98,7 @@ export function loginByPhone(data, params) {
  * @param {String} params.app 应用标识
  */
 export function sendLoginCode(data, params) {
-    return $uc(options).post("/api/uc/user/account/phone/login/code-send", data, {
+    return $uc().post("/api/uc/user/account/phone/login/code-send", data, {
         params,
     });
 }
@@ -116,7 +112,7 @@ export function sendLoginCode(data, params) {
  * @param {String} params.app 应用标识
  */
 export function loginByPhoneCode(data, params) {
-    return $uc(options).post("/api/uc/user/account/phone/login/code-verify", data, {
+    return $uc().post("/api/uc/user/account/phone/login/code-verify", data, {
         params,
     });
 }
@@ -131,7 +127,7 @@ export function loginByPhoneCode(data, params) {
  * @param {String} params.app 应用标识
  */
 export function sendCode(data, params) {
-    return $uc(options).post("/api/uc/user/account/phone/forgot-password", data, {
+    return $uc().post("/api/uc/user/account/phone/forgot-password", data, {
         params,
     });
 }
@@ -146,7 +142,7 @@ export function sendCode(data, params) {
  * @param {String} params.app 应用标识
  */
 export function resetPassword(data, params) {
-    return $uc(options).put("/api/uc/user/account/phone/reset-password", data, {
+    return $uc().put("/api/uc/user/account/phone/reset-password", data, {
         params,
     });
 }

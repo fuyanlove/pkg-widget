@@ -1,6 +1,6 @@
 <template>
     <div class="m-card m-register-card">
-        <card-header :title="$t('common.register')">
+        <card-header :title="$t('account.phone.resetPassword')">
             <template #right>
                 <lang-select :lang="form.lang" @change="changeLang" />
             </template>
@@ -66,7 +66,7 @@
                     <a :href="terms" target="_blank">《{{ $t("common.terms") }}》 </a>
                 </el-checkbox>
             </div>
-            <el-button class="u-btn u-submit" type="primary" @click="onRegister">{{ $t("common.register") }}</el-button>
+            <el-button class="u-btn u-submit" type="primary" @click="onResetPassword">{{ $t("common.register") }}</el-button>
         </div>
 
         <main class="m-card-main" v-if="success == true">
@@ -101,13 +101,13 @@
     </div>
     <div class="m-footer">
         <div class="m-footer-skip">
-            {{ $t("common.hadAccount") }} <a class="u-link" :href="loginLink">{{ $t("common.login") }} &raquo;</a>
+            <a class="u-link" :href="loginLink">← {{ $t("common.back") + $t("common.login") }}</a>
         </div>
     </div>
 </template>
 
 <script>
-import { checkPhone, registerByPhone, checkPhoneCode, activeByPhone } from "../../../service/phone";
+import { checkPhone, checkPhoneCode, sendCode, resetPassword } from "../../../service/phone";
 import CardHeader from "../../common/card-header.vue";
 import User from "@iruxu/pkg-common/utils/user";
 import LangSelect from "../../common/lang-select.vue";
@@ -206,7 +206,7 @@ export default {
                 return;
             }
             const phone = `+${this.phoneCode}${this.form.phone}`;
-            registerByPhone({ phone: phone }, { app: this.app }).then(() => {
+            sendCode({ phone: phone }, { app: this.app }).then(() => {
                 this.$message.success(this.$t("account.phone.sendSuccess"));
                 this.interval = 60;
                 this.timer = setInterval(() => {
@@ -217,7 +217,7 @@ export default {
                 }, 1000);
             });
         },
-        onRegister() {
+        onResetPassword() {
             this.$refs.registerForm.validate(async (valid) => {
                 if (valid) {
 
@@ -225,12 +225,11 @@ export default {
                     const phone = `+${this.phoneCode}${this.form.phone}`;
                     checkPhoneCode({ phone, code: this.form.code }).then(() => {
                         const data = {
-                            lang: this.form.lang,
                             phone: phone,
                             password: this.form.password,
                             code: this.form.code,
                         };
-                        activeByPhone(data, { app: this.app })
+                        resetPassword(data, { app: this.app })
                             .then(() => {
                                 this.success = true;
                             })

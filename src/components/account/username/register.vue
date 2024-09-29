@@ -65,14 +65,6 @@ export default {
             // 协议
             type: Array,
             default: () => [
-                {
-                    name: "用户协议",
-                    href: "https://www.jx3box.com/about/license",
-                },
-                {
-                    name: "隐私政策",
-                    href: "https://www.jx3box.com/about/privacy",
-                },
             ],
         },
     },

@@ -73,8 +73,17 @@ export default {
         // UI Messages
         send: "Send Code",
         sendSuccess: "Send Success",
+        registerSuccess: "Register Success",
+        registerSuccessDesc:
+            "Congratulations, you are now a member of RX Planet!",
+        registerFailed: "Registration failed",
+        registerFailedDesc: "Registration failed, please try again later",
 
         // Login
-        loginFailedWithPwd: "Login failed, please check the phone number and password",
-    }
+        loginFailedWithPwd:
+            "Login failed, please check the phone number and password",
+
+        // Reset
+        resetPassword: "Reset Password",
+    },
 };
