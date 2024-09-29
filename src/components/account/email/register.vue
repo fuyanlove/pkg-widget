@@ -154,12 +154,8 @@ export default {
             },
 
             rules: {
-                // nickname: [
-                //     { required: true, message: this.$t("account.email.nicknamePlaceholder"), trigger: "blur" },
-                //     { validator: this.checkNickname, trigger: "blur" },
-                // ],
                 email: [
-                    { required: true, message: this.$t("account.email.addressPlaceholder"), trigger: "blur" },
+                    { required: true, message: this.$t("account.email.addressPlaceholder"), trigger: "change" },
                     { type: "email", message: this.$t("account.email.addressError"), trigger: ["blur", "change"] },
                     { validator: this.check, trigger: "blur" },
                 ],

@@ -60,7 +60,7 @@
                     </el-row>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="PhoneCodeLogin" name="sixth">
+            <el-tab-pane label="PhoneResetPassword" name="sixth">
                 <div
                     class="p-account p-account-phone p-account-phone--login"
                 >

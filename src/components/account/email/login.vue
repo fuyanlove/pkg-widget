@@ -102,7 +102,7 @@ export default {
 
             rules: {
                 email: [
-                    { required: true, message: this.$t("account.email.addressPlaceholder"), trigger: "blur" },
+                    { required: true, message: this.$t("account.email.addressPlaceholder"), trigger: "change" },
                     { type: "email", message: this.$t("account.email.addressError"), trigger: ["blur", "change"] },
                 ],
                 password: [

@@ -107,11 +107,12 @@
 </template>
 
 <script>
-import { checkPhone, checkPhoneCode, sendCode, resetPassword } from "../../../service/phone";
+import { checkPhoneCode, sendCode, resetPassword } from "../../../service/phone";
 import CardHeader from "../../common/card-header.vue";
 import User from "@iruxu/pkg-common/utils/user";
 import LangSelect from "../../common/lang-select.vue";
 import PhoneCodeSelect from "../../common/phone-code-select.vue";
+import { parsePhoneNumberFromString } from "libphonenumber-js"
 
 export default {
     name: "PhoneRegister",
@@ -144,8 +145,19 @@ export default {
 
             rules: {
                 phone: [
-                    { required: true, message: this.$t("account.phone.numberPlaceholder"), trigger: "blur" },
-                    { validator: this.check, trigger: "blur" },
+                    { required: true, message: this.$t("account.phone.numberPlaceholder"), trigger: "change" },
+                    {validator: (rule, value, callback) => {
+                            const phone = `+${this.phoneCode}${value}`;
+                            const phoneNumber = parsePhoneNumberFromString(phone);
+                            if (!phoneNumber || !phoneNumber.isValid()) {
+                                callback(new Error(this.$t("account.phone.numberError")));
+                            } else {
+                                this.phoneChecked = true;
+                                callback();
+                            }
+                        },
+                        trigger: "change",
+                    }
                 ],
                 password: [
                     { required: true, message: this.$t("common.passwordPlaceholder"), trigger: "blur" },
@@ -186,20 +198,6 @@ export default {
         this.form.lang = User.getLocale();
     },
     methods: {
-        async check(rule, value, callback) {
-            if (!value) {
-                callback(new Error(this.$t("account.phone.numberPlaceholder")));
-            } else {
-                const phone = `+${this.phoneCode}${value}`;
-                const res = await checkPhone(phone);
-                if (res) {
-                    callback(new Error(this.$t("account.phone.numberError")));
-                    return;
-                }
-                this.phoneChecked = true;
-                callback();
-            }
-        },
         // 发送验证码
         senCode() {
             if (!this.form.phone) {
@@ -220,7 +218,6 @@ export default {
         onResetPassword() {
             this.$refs.registerForm.validate(async (valid) => {
                 if (valid) {
-
                     // 检测验证码
                     const phone = `+${this.phoneCode}${this.form.phone}`;
                     checkPhoneCode({ phone, code: this.form.code }).then(() => {

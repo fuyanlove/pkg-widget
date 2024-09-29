@@ -109,7 +109,7 @@ export default {
 
             rules: {
                 phone: [
-                    { required: true, message: this.$t("account.phone.numberPlaceholder"), trigger: "blur" },
+                    { required: true, message: this.$t("account.phone.numberPlaceholder"), trigger: "change" },
                 ],
                 password: [
                     { required: true, message: this.$t("common.passwordPlaceholder"), trigger: "blur" },

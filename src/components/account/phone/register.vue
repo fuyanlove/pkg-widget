@@ -144,16 +144,16 @@ export default {
 
             rules: {
                 phone: [
-                    { required: true, message: this.$t("account.phone.numberPlaceholder"), trigger: "blur" },
-                    { validator: this.check, trigger: "blur" },
+                    { required: true, message: this.$t("account.phone.numberPlaceholder"), trigger: "change" },
+                    { validator: this.check, trigger: "change" },
                 ],
                 password: [
-                    { required: true, message: this.$t("common.passwordPlaceholder"), trigger: "blur" },
-                    { min: 6, max: 30, message: this.$t("common.passwordError"), trigger: "blur" },
+                    { required: true, message: this.$t("common.passwordPlaceholder"), trigger: "change" },
+                    { min: 6, max: 30, message: this.$t("common.passwordError"), trigger: "change" },
                 ],
                 password1: [
-                    { required: true, message: this.$t("common.password2Placeholder"), trigger: "blur" },
-                    { min: 6, max: 30, message: this.$t("common.passwordError"), trigger: "blur" },
+                    { required: true, message: this.$t("common.password2Placeholder"), trigger: "change" },
+                    { min: 6, max: 30, message: this.$t("common.passwordError"), trigger: "change" },
                     {
                         validator: (rule, value, callback) => {
                             if (value !== this.form.password) {
