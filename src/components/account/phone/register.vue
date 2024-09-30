@@ -188,11 +188,13 @@ export default {
     methods: {
         async check(rule, value, callback) {
             if (!value) {
+                this.phoneChecked = false;
                 callback(new Error(this.$t("account.phone.numberPlaceholder")));
             } else {
                 const phone = `+${this.phoneCode}${value}`;
                 const res = await checkPhone(phone);
                 if (res) {
+                    this
                     callback(new Error(this.$t("account.phone.numberError")));
                     return;
                 }

@@ -205,10 +205,12 @@ export default {
     methods: {
         async check(rule, value, callback) {
             if (!value) {
+                this.emailChecked = false;
                 callback(new Error(this.$t("account.email.addressPlaceholder")));
             } else {
                 const res = await checkEmail(value);
                 if (res) {
+                    this.emailChecked = false;
                     callback(new Error(this.$t("account.email.emailRegistered")));
                     return;
                 }

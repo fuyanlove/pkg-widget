@@ -148,6 +148,7 @@ export default {
                             const phone = `+${this.phoneCode}${value}`;
                             const phoneNumber = parsePhoneNumberFromString(phone);
                             if (!phoneNumber || !phoneNumber.isValid()) {
+                                this.phoneChecked = false;
                                 callback(new Error(this.$t("account.phone.numberError")));
                             } else {
                                 this.phoneChecked = true;
