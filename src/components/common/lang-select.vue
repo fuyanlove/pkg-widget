@@ -1,8 +1,8 @@
 <template>
     <div class="c-lang-select">
         <div class="u-select-label"><span class="fi" :class="flag"></span></div>
-        <el-select class="u-select" v-model="current" popper-class="c-lang-select__pop" @change="onLangChange">
-            <el-option v-for="item in languages" :key="item.langCode" :label="item.name" :value="item.langCode">
+        <el-select class="u-select" v-model="current" popper-class="c-lang-select__pop" filterable :filter-method="filterMethod" @change="onLangChange">
+            <el-option v-for="item in filterLanguages" :key="item.langCode" :label="item.name" :value="item.langCode">
                 <span class="fi" :class="`fi-${item.countryCode}`"></span>
                 <span>{{ item.name }}</span>
             </el-option>
@@ -25,6 +25,8 @@ export default {
     data() {
         return {
             current: "",
+
+            filterLanguages: [],
         };
     },
     computed: {
@@ -46,12 +48,26 @@ export default {
             immediate: true,
         },
     },
+    mounted() {
+        this.filterLanguages = this.languages;
+    },
     methods: {
         onLangChange(lang) {
             this.$emit("change", lang);
 
             this.$i18n.locale = lang;
             User.setLocale(lang);
+        },
+        filterMethod(query) {
+            if (query !== "") {
+                this.filterLanguages = this.languages.filter((item) => {
+                    return item.name
+                        .toLowerCase()
+                        .includes(query.toLowerCase());
+                });
+            } else {
+                this.filterLanguages = this.languages;
+            }
         },
     },
 };
