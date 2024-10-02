@@ -66,7 +66,7 @@
                     <a :href="terms" target="_blank">《{{ $t("common.terms") }}》 </a>
                 </el-checkbox>
             </div>
-            <el-button class="u-btn u-submit" type="primary" @click="onRegister">{{ $t("common.register") }}</el-button>
+            <el-button class="u-btn u-submit" type="primary" :disabled="!canSubmit" @click="onRegister">{{ $t("common.register") }}</el-button>
         </div>
 
         <main class="m-card-main" v-if="success == true">
@@ -112,6 +112,7 @@ import CardHeader from "../../common/card-header.vue";
 import User from "@iruxu/pkg-common/utils/user";
 import LangSelect from "../../common/lang-select.vue";
 import PhoneCodeSelect from "../../common/phone-code-select.vue";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 export default {
     name: "PhoneRegister",
@@ -145,15 +146,28 @@ export default {
             rules: {
                 phone: [
                     { required: true, message: this.$t("account.phone.numberPlaceholder"), trigger: "change" },
-                    { validator: this.check, trigger: "change" },
+                    {
+                        validator: (rule, value, callback) => {
+                            const phone = `+${this.phoneCode}${value}`;
+                            const phoneNumber = parsePhoneNumberFromString(phone);
+                            if (!phoneNumber || !phoneNumber.isValid()) {
+                                callback(new Error(this.$t("account.phone.numberError")));
+                            } else {
+                                this.phoneChecked = true;
+                                callback();
+                            }
+                        },
+                        trigger: "blur",
+                    },
+                    { validator: this.check, trigger: "blur" },
                 ],
                 password: [
-                    { required: true, message: this.$t("common.passwordPlaceholder"), trigger: "change" },
-                    { min: 6, max: 30, message: this.$t("common.passwordError"), trigger: "change" },
+                    { required: true, message: this.$t("common.passwordPlaceholder"), trigger: "blur" },
+                    { min: 6, max: 30, message: this.$t("common.passwordError"), trigger: "blur" },
                 ],
                 password1: [
-                    { required: true, message: this.$t("common.password2Placeholder"), trigger: "change" },
-                    { min: 6, max: 30, message: this.$t("common.passwordError"), trigger: "change" },
+                    { required: true, message: this.$t("common.password2Placeholder"), trigger: "blur" },
+                    { min: 6, max: 30, message: this.$t("common.passwordError"), trigger: "blur" },
                     {
                         validator: (rule, value, callback) => {
                             if (value !== this.form.password) {
@@ -177,6 +191,11 @@ export default {
             interval: 0,
             timer: null,
         };
+    },
+    computed: {
+        canSubmit() {
+            return this.phoneChecked && this.agreement && this.form.password && this.form.code;
+        },
     },
     mounted() {
         // 生成特征码
