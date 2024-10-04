@@ -10,6 +10,7 @@ export default defineConfig({
             less: {
                 additionalData: `
                     @import "./node_modules/csslab/base.less";
+                    @import "./node_modules/csslab/reset.less";
                     @import "./src/assets/css/var.less";
                 `,
             },

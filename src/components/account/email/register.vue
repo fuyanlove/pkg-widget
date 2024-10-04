@@ -1,6 +1,6 @@
 <template>
     <div class="m-card m-register-card">
-        <card-header :title="$t('common.register')">
+        <card-header :title="$t('account.common.register')">
             <template #right>
                 <lang-select :lang="form.lang" @change="changeLang" />
             </template>
@@ -59,7 +59,7 @@
                 <el-form-item prop="password" class="m-password">
                     <template #label>
                         <div class="m-card-form-label">
-                            <span>{{ $t("common.password") }}<i class="is-required">*</i></span>
+                            <span>{{ $t("account.common.password") }}<i class="is-required">*</i></span>
                         </div>
                     </template>
                     <el-input v-model.trim="form.password" type="password" size="large" show-password> </el-input>
@@ -67,7 +67,7 @@
                 <el-form-item prop="password1" class="m-password">
                     <template #label>
                         <div class="m-card-form-label">
-                            <span>{{ $t("common.passwordConfirm") }}<i class="is-required">*</i></span>
+                            <span>{{ $t("account.common.passwordConfirm") }}<i class="is-required">*</i></span>
                         </div>
                     </template>
                     <el-input v-model.trim="form.password1" type="password" size="large" show-password> </el-input>
@@ -75,11 +75,11 @@
             </el-form>
             <div class="u-terms">
                 <el-checkbox v-model="agreement" class="u-checkbox"
-                    >{{ $t("common.read") }}
-                    <a :href="terms" target="_blank">《{{ $t("common.terms") }}》 </a>
+                    >{{ $t("account.common.read") }}
+                    <a :href="terms" target="_blank">《{{ $t("account.common.terms") }}》 </a>
                 </el-checkbox>
             </div>
-            <el-button class="u-btn u-submit" type="primary" @click="onRegister">{{ $t("common.register") }}</el-button>
+            <el-button class="u-btn u-submit" type="primary" @click="onRegister">{{ $t("account.common.register") }}</el-button>
         </div>
 
         <main class="m-card-main" v-if="success == true">
@@ -93,7 +93,7 @@
             >
             </el-alert>
             <el-button size="large" class="u-btn u-back" type="primary" @click="goLogin">{{
-                $t("common.login")
+                $t("account.common.login")
             }}</el-button>
         </main>
 
@@ -108,13 +108,13 @@
             >
             </el-alert>
             <el-button size="large" class="u-btn u-back" type="primary" @click="onBack">{{
-                $t("common.back")
+                $t("account.common.back")
             }}</el-button>
         </main>
     </div>
     <div class="m-footer">
         <div class="m-footer-skip">
-            {{ $t("common.hadAccount") }} <a class="u-link" :href="loginLink">{{ $t("common.login") }} &raquo;</a>
+            {{ $t("account.common.hadAccount") }} <a class="u-link" :href="loginLink">{{ $t("account.common.login") }} &raquo;</a>
         </div>
     </div>
 </template>
@@ -160,16 +160,16 @@ export default {
                     { validator: this.check, trigger: "blur" },
                 ],
                 password: [
-                    { required: true, message: this.$t("common.passwordPlaceholder"), trigger: "blur" },
-                    { min: 6, max: 30, message: this.$t("common.passwordError"), trigger: "blur" },
+                    { required: true, message: this.$t("account.common.passwordPlaceholder"), trigger: "blur" },
+                    { min: 6, max: 30, message: this.$t("account.common.passwordError"), trigger: "blur" },
                 ],
                 password1: [
-                    { required: true, message: this.$t("common.password2Placeholder"), trigger: "blur" },
-                    { min: 6, max: 30, message: this.$t("common.passwordError"), trigger: "blur" },
+                    { required: true, message: this.$t("account.common.password2Placeholder"), trigger: "blur" },
+                    { min: 6, max: 30, message: this.$t("account.common.passwordError"), trigger: "blur" },
                     {
                         validator: (rule, value, callback) => {
                             if (value !== this.form.password) {
-                                callback(new Error(this.$t("common.passwordError2")));
+                                callback(new Error(this.$t("account.common.passwordError2")));
                             } else {
                                 callback();
                             }

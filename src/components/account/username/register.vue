@@ -16,7 +16,7 @@
                     type="password"
                     size="large"
                     show-password
-                    :placeholder="$t('common.password')"
+                    :placeholder="$t('account.common.password')"
                 >
                     <template #prepend
                         ><el-icon><Lock></Lock></el-icon
@@ -25,7 +25,7 @@
             </el-form-item>
             <el-form-item class="u-terms">
                 <el-checkbox v-model="agreement" class="u-checkbox"
-                    >{{ $t("common.read") }}
+                    >{{ $t("account.common.read") }}
                     <a v-for="(item, index) in agreements" :key="index" :href="item.href" target="_blank"
                         >《{{ item.name }}》
                         {{ index === agreements.length - 1 ? "" : "、" }}
@@ -34,12 +34,12 @@
             </el-form-item>
             <el-form-item>
                 <el-button class="u-button u-submit" type="primary" @click="onRegister" :disabled="!canSubmit">{{
-                    $t("common.register")
+                    $t("account.common.register")
                 }}</el-button>
             </el-form-item>
             <el-form-item class="m-footer">
                 <p class="u-login">
-                    {{ $t("common.hadAccount") }} <a :href="loginLink">{{ $t("common.login") }} &raquo;</a>
+                    {{ $t("account.common.hadAccount") }} <a :href="loginLink">{{ $t("account.common.login") }} &raquo;</a>
                 </p>
             </el-form-item>
         </el-form>
@@ -82,8 +82,8 @@ export default {
                     { min: 3, max: 20, message: this.$t("account.username.nameError"), trigger: "blur" },
                 ],
                 password: [
-                    { required: true, message: this.$t("common.passwordPlaceholder"), trigger: "blur" },
-                    { min: 6, max: 30, message: this.$t("common.passwordError"), trigger: "blur" },
+                    { required: true, message: this.$t("account.common.passwordPlaceholder"), trigger: "blur" },
+                    { min: 6, max: 30, message: this.$t("account.common.passwordError"), trigger: "blur" },
                 ],
             },
 

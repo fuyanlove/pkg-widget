@@ -1,7 +1,7 @@
 <!-- 公共组件 手机号验证码登录 -->
 <template>
     <div class="m-card m-login-card">
-        <card-header :title="$t('common.login')">
+        <card-header :title="$t('account.common.login')">
             <template #right>
                 <lang-select :lang="lang" />
             </template>
@@ -68,16 +68,16 @@
                 :title="error"
             ></el-alert>
             <el-button class="u-btn u-submit" type="primary" @click="onLogin">{{
-                $t("common.login")
+                $t("account.common.login")
             }}</el-button>
         </div>
 
         <div class="m-card-main" v-else>
             <el-alert
                 class="m-alert"
-                :title="$t('common.loginSuccess')"
+                :title="$t('account.common.loginSuccess')"
                 type="success"
-                :description="$t('common.loginSuccessDesc')"
+                :description="$t('account.common.loginSuccessDesc')"
                 show-icon
                 :closable="false"
             >
@@ -91,9 +91,9 @@
     </div>
     <div class="m-footer">
         <div class="m-footer-skip">
-            {{ $t("common.noAccount") }}
+            {{ $t("account.common.noAccount") }}
             <a class="u-link" :href="registerLink"
-                >{{ $t("common.registerNow") }} 👉</a
+                >{{ $t("account.common.registerNow") }} 👉</a
             >
         </div>
     </div>
@@ -147,7 +147,11 @@ export default {
                         validator: (rule, value, callback) => {
                             const phone = `+${this.phoneCode}${value}`;
                             const phoneNumber = parsePhoneNumberFromString(phone);
-                            if (!phoneNumber || !phoneNumber.isValid()) {
+                            if (!phoneNumber) {
+                                this.phoneChecked = false;
+                                callback(new Error(this.$t("account.phone.numberPlaceholder")));
+                            }
+                            if (!phoneNumber.isValid()) {
                                 this.phoneChecked = false;
                                 callback(new Error(this.$t("account.phone.numberError")));
                             } else {
@@ -203,7 +207,7 @@ export default {
                     loginByPhoneCode(data, { app: this.app })
                         .then((res) => {
                             this.$message.success(
-                                this.$t("common.loginSuccess")
+                                this.$t("account.common.loginSuccess")
                             );
                             this.success = true;
 
@@ -242,10 +246,10 @@ export default {
             let redirect = search.get("redirect");
             if (redirect) {
                 this.redirect = redirect;
-                this.redirect_button = this.$t("common.jump");
+                this.redirect_button = this.$t("account.common.jump");
             } else {
                 this.redirect = this.homepage;
-                this.redirect_button = this.$t("common.backToHome");
+                this.redirect_button = this.$t("account.common.backToHome");
             }
         },
         skip() {
