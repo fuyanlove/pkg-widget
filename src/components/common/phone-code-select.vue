@@ -73,9 +73,9 @@ export default {
         filterMethod(query) {
             if (query !== "") {
                 this.filterData = this.countryData.filter((item) => {
-                    return item.name
+                    return (item.name
                         .toLowerCase()
-                        .includes(query.toLowerCase());
+                        .includes(query.toLowerCase()) || item.dialCode.includes(query));
                 });
             } else {
                 this.filterData = this.countryData;

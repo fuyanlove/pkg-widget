@@ -1,4 +1,35 @@
 export default {
+    common: {
+        // UI Labels
+        login: "Login",
+        password: "Password",
+        passwordConfirm: "Confirm Password",
+        register: "Register",
+        noAccount: "Don't have an account?",
+        hadAccount: "Already have an account?",
+        registerNow: "Register Now",
+        back: "Back",
+
+        // Account Messages
+        loginSuccess: "Login Success",
+        loginSuccessDesc: "Dear, Welcome back!",
+        passwordPlaceholder: "Please enter your password",
+        password2Placeholder: "Please enter your password again",
+        passwordError: "Length between 6 and 30 characters",
+        passwordError2: "The two passwords do not match",
+        read: "I have read and agree to",
+        terms: "Terms of Service",
+        jump: "Jumping to",
+        backToHome: "Back to Home",
+
+        // Route Name
+        dashboard: "Dashboard",
+        usernameLogin: "Login - Username",
+        usernameRegister: "Register - Username",
+        emailLogin: "Login - Email",
+        emailRegister: "Register - Email",
+        emailResetPassword: "Reset Password - Email",
+    },
     email: {
         // UI Labels
         address: "Email",
@@ -73,8 +104,19 @@ export default {
         // UI Messages
         send: "Send Code",
         sendSuccess: "Send Success",
+        registerSuccess: "Register Success",
+        registerSuccessDesc:
+            "Congratulations, you are now a member of RX Planet!",
+        registerFailed: "Registration failed",
+        registerFailedDesc: "Registration failed, please try again later",
 
         // Login
-        loginFailedWithPwd: "Login failed, please check the phone number and password",
-    }
+        loginFailedWithPwd:
+            "Login failed, please check the phone number and password",
+
+        // Reset
+        resetPassword: "Reset Password",
+        resetSuccess: "Reset Success",
+        resetSuccessDesc: "Your password has been reset successfully",
+    },
 };

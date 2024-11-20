@@ -1,6 +1,6 @@
 {
     "name": "@iruxu/pkg-widget",
-    "version": "0.0.2",
+    "version": "0.0.9",
     "type": "module",
     "scripts": {
         "dev": "vite",
@@ -10,7 +10,7 @@
     },
     "dependencies": {
         "@element-plus/icons-vue": "^2.3.1",
-        "@iruxu/pkg-common": "^0.0.2",
+        "@iruxu/pkg-common": "^0.0.4",
         "csslab": "^4.0.4",
         "element-plus": "^2.8.4",
         "flag-icons": "^7.2.3",

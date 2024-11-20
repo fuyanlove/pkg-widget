@@ -1,6 +1,6 @@
 <template>
     <div class="m-card m-register-card">
-        <card-header :title="$t('common.register')">
+        <card-header :title="$t('account.common.register')">
             <template #right>
                 <lang-select :lang="form.lang" @change="changeLang" />
             </template>
@@ -40,13 +40,13 @@
                         size="small"
                         @click="senCode"
                         :disabled="interval > 0 || !phoneChecked"
-                        >{{ $t("account.email.send") }}<span v-if="interval">({{ interval }}s)</span></el-button
+                        >{{ $t("account.phone.send") }}<span v-if="interval">({{ interval }}s)</span></el-button
                     >
                 </el-form-item>
                 <el-form-item prop="password" class="m-password">
                     <template #label>
                         <div class="m-card-form-label">
-                            <span>{{ $t("common.password") }}<i class="is-required">*</i></span>
+                            <span>{{ $t("account.common.password") }}<i class="is-required">*</i></span>
                         </div>
                     </template>
                     <el-input v-model.trim="form.password" type="password" size="large" show-password> </el-input>
@@ -54,7 +54,7 @@
                 <el-form-item prop="password1" class="m-password">
                     <template #label>
                         <div class="m-card-form-label">
-                            <span>{{ $t("common.passwordConfirm") }}<i class="is-required">*</i></span>
+                            <span>{{ $t("account.common.passwordConfirm") }}<i class="is-required">*</i></span>
                         </div>
                     </template>
                     <el-input v-model.trim="form.password1" type="password" size="large" show-password> </el-input>
@@ -62,46 +62,46 @@
             </el-form>
             <div class="u-terms">
                 <el-checkbox v-model="agreement" class="u-checkbox"
-                    >{{ $t("common.read") }}
-                    <a :href="terms" target="_blank">《{{ $t("common.terms") }}》 </a>
+                    >{{ $t("account.common.read") }}
+                    <a :href="terms" target="_blank">《{{ $t("account.common.terms") }}》 </a>
                 </el-checkbox>
             </div>
-            <el-button class="u-btn u-submit" type="primary" @click="onRegister">{{ $t("common.register") }}</el-button>
+            <el-button class="u-btn u-submit" type="primary" :disabled="!canSubmit" @click="onRegister">{{ $t("account.common.register") }}</el-button>
         </div>
 
         <main class="m-card-main" v-if="success == true">
             <el-alert
                 class="m-alert"
-                :title="$t('account.email.registerSuccess')"
+                :title="$t('account.phone.registerSuccess')"
                 type="success"
-                :description="$t('account.email.registerSuccessDesc')"
+                :description="$t('account.phone.registerSuccessDesc')"
                 show-icon
                 :closable="false"
             >
             </el-alert>
             <el-button size="large" class="u-btn u-back" type="primary" @click="goLogin">{{
-                $t("common.login")
+                $t("account.common.login")
             }}</el-button>
         </main>
 
         <main class="m-card-main" v-if="success == false">
             <el-alert
                 class="m-alert"
-                :title="$t('account.email.registerFailed')"
+                :title="$t('account.phone.registerFailed')"
                 type="error"
-                :description="$t('account.email.registerFailedDesc')"
+                :description="$t('account.phone.registerFailedDesc')"
                 show-icon
                 :closable="false"
             >
             </el-alert>
             <el-button size="large" class="u-btn u-back" type="primary" @click="onBack">{{
-                $t("common.back")
+                $t("account.common.back")
             }}</el-button>
         </main>
     </div>
     <div class="m-footer">
         <div class="m-footer-skip">
-            {{ $t("common.hadAccount") }} <a class="u-link" :href="loginLink">{{ $t("common.login") }} &raquo;</a>
+            {{ $t("account.common.hadAccount") }} <a class="u-link" :href="loginLink">{{ $t("account.common.login") }} &raquo;</a>
         </div>
     </div>
 </template>
@@ -112,6 +112,7 @@ import CardHeader from "../../common/card-header.vue";
 import User from "@iruxu/pkg-common/utils/user";
 import LangSelect from "../../common/lang-select.vue";
 import PhoneCodeSelect from "../../common/phone-code-select.vue";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 export default {
     name: "PhoneRegister",
@@ -144,20 +145,37 @@ export default {
 
             rules: {
                 phone: [
-                    { required: true, message: this.$t("account.phone.numberPlaceholder"), trigger: "blur" },
+                    { required: true, message: this.$t("account.phone.numberPlaceholder"), trigger: "change" },
+                    {
+                        validator: (rule, value, callback) => {
+                            const phone = `+${this.phoneCode}${value}`;
+                            const phoneNumber = parsePhoneNumberFromString(phone);
+                            if (!phoneNumber) {
+                                this.phoneChecked = false;
+                                callback(new Error(this.$t("account.phone.numberPlaceholder")));
+                            }
+                            if (!phoneNumber.isValid()) {
+                                callback(new Error(this.$t("account.phone.numberError")));
+                            } else {
+                                this.phoneChecked = true;
+                                callback();
+                            }
+                        },
+                        trigger: "blur",
+                    },
                     { validator: this.check, trigger: "blur" },
                 ],
                 password: [
-                    { required: true, message: this.$t("common.passwordPlaceholder"), trigger: "blur" },
-                    { min: 6, max: 30, message: this.$t("common.passwordError"), trigger: "blur" },
+                    { required: true, message: this.$t("account.common.passwordPlaceholder"), trigger: "blur" },
+                    { min: 6, max: 30, message: this.$t("account.common.passwordError"), trigger: "blur" },
                 ],
                 password1: [
-                    { required: true, message: this.$t("common.password2Placeholder"), trigger: "blur" },
-                    { min: 6, max: 30, message: this.$t("common.passwordError"), trigger: "blur" },
+                    { required: true, message: this.$t("account.common.password2Placeholder"), trigger: "blur" },
+                    { min: 6, max: 30, message: this.$t("account.common.passwordError"), trigger: "blur" },
                     {
                         validator: (rule, value, callback) => {
                             if (value !== this.form.password) {
-                                callback(new Error(this.$t("common.passwordError2")));
+                                callback(new Error(this.$t("account.common.passwordError2")));
                             } else {
                                 callback();
                             }
@@ -178,6 +196,11 @@ export default {
             timer: null,
         };
     },
+    computed: {
+        canSubmit() {
+            return this.phoneChecked && this.agreement && this.form.password && this.form.code;
+        },
+    },
     mounted() {
         // 生成特征码
         User.generateFingerprint();
@@ -188,25 +211,17 @@ export default {
     methods: {
         async check(rule, value, callback) {
             if (!value) {
+                this.phoneChecked = false;
                 callback(new Error(this.$t("account.phone.numberPlaceholder")));
             } else {
                 const phone = `+${this.phoneCode}${value}`;
                 const res = await checkPhone(phone);
                 if (res) {
+                    this
                     callback(new Error(this.$t("account.phone.numberError")));
                     return;
                 }
                 this.phoneChecked = true;
-                callback();
-            }
-        },
-        checkNickname(rule, value, callback) {
-            // 不允许有空格和特殊符号
-            if (!value) {
-                callback(new Error(this.$t("account.email.nicknamePlaceholder")));
-            } else if (!/^[a-zA-Z0-9_\u4e00-\u9fa5]+$/.test(value)) {
-                callback(new Error(this.$t("account.email.nicknameError")));
-            } else {
                 callback();
             }
         },
