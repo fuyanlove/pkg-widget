@@ -1,7 +1,7 @@
 <!-- 公共组件 邮件地址注册 -->
 <template>
     <div class="m-card m-login-card">
-        <card-header :title="$t('common.login')">
+        <card-header :title="$t('account.common.login')">
             <template #right>
                 <lang-select :lang="lang" />
             </template>
@@ -28,7 +28,7 @@
                 <el-form-item prop="password">
                     <template #label>
                         <div class="m-card-form-label">
-                            <span>{{ $t("common.password") }}</span>
+                            <span>{{ $t("account.common.password") }}</span>
                             <span class="u-resetpwd">
                                 <a :href="resetPwdLink">{{ $t("account.email.forgetPassword") }}?</a>
                             </span>
@@ -45,15 +45,15 @@
                 </el-form-item>
             </el-form>
             <el-alert class="u-alert" v-if="error" type="error" show-icon :title="error"></el-alert>
-            <el-button class="u-btn u-submit" type="primary" @click="onLogin">{{ $t("common.login") }}</el-button>
+            <el-button class="u-btn u-submit" type="primary" @click="onLogin">{{ $t("account.common.login") }}</el-button>
         </div>
 
         <div class="m-card-main" v-else>
             <el-alert
                 class="m-alert"
-                :title="$t('common.loginSuccess')"
+                :title="$t('account.common.loginSuccess')"
                 type="success"
-                :description="$t('common.loginSuccessDesc')"
+                :description="$t('account.common.loginSuccessDesc')"
                 show-icon
                 :closable="false"
             >
@@ -63,7 +63,7 @@
     </div>
     <div class="m-footer">
         <div class="m-footer-skip">
-            {{ $t("common.noAccount") }} <a class="u-link" :href="registerLink">{{ $t("common.registerNow") }} 👉</a>
+            {{ $t("account.common.noAccount") }} <a class="u-link" :href="registerLink">{{ $t("account.common.registerNow") }} 👉</a>
         </div>
     </div>
 </template>
@@ -103,11 +103,11 @@ export default {
             rules: {
                 email: [
                     { required: true, message: this.$t("account.email.addressPlaceholder"), trigger: "blur" },
-                    { type: "email", message: this.$t("account.email.addressError"), trigger: ["blur", "change"] },
+                    { type: "email", message: this.$t("account.email.addressError"), trigger: ["blur"] },
                 ],
                 password: [
-                    { required: true, message: this.$t("common.passwordPlaceholder"), trigger: "blur" },
-                    { min: 6, max: 30, message: this.$t("common.passwordError"), trigger: "blur" },
+                    { required: true, message: this.$t("account.common.passwordPlaceholder"), trigger: "blur" },
+                    { min: 6, max: 30, message: this.$t("account.common.passwordError"), trigger: "blur" },
                 ],
             },
 
@@ -140,7 +140,7 @@ export default {
                 if (valid) {
                     loginByEmail(this.form, { app: this.app })
                         .then((res) => {
-                            this.$message.success(this.$t("common.loginSuccess"));
+                            this.$message.success(this.$t("account.common.loginSuccess"));
                             this.success = true;
 
                             User.update(res.data.data).then(() => {
@@ -159,10 +159,10 @@ export default {
             let redirect = search.get("redirect");
             if (redirect) {
                 this.redirect = redirect;
-                this.redirect_button = this.$t("common.jump");
+                this.redirect_button = this.$t("account.common.jump");
             } else {
                 this.redirect = this.homepage;
-                this.redirect_button = this.$t("common.backToHome");
+                this.redirect_button = this.$t("account.common.backToHome");
             }
         },
         skip() {
