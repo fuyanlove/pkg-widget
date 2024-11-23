@@ -19,7 +19,7 @@ export default {
     props: {
         lang: {
             type: String,
-            default: "zh-CN",
+            default: "en-US",
         },
     },
     data() {
