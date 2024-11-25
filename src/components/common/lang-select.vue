@@ -1,6 +1,9 @@
 <template>
     <div class="c-lang-select">
-        <div class="u-select-label"><span class="fi" :class="flag"></span></div>
+        <div class="u-select-label">
+            <span v-show="showFlag" class="fi u-flag" :class="flag"></span>
+            <span class="u-name" v-show="showName">{{ name }}</span>
+        </div>
         <el-select class="u-select" v-model="current" popper-class="c-lang-select__pop" filterable :filter-method="filterMethod" @change="onLangChange">
             <el-option v-for="item in filterLanguages" :key="item.langCode" :label="item.name" :value="item.langCode">
                 <span class="fi" :class="`fi-${item.countryCode}`"></span>
@@ -21,6 +24,11 @@ export default {
             type: String,
             default: "en-US",
         },
+        selected: {
+            // icon text or all
+            type: String,
+            default: "",
+        }
     },
     data() {
         return {
@@ -38,6 +46,16 @@ export default {
             const countryCode = langObj?.countryCode;
 
             return `fi-${countryCode?.toLowerCase()}`;
+        },
+        name() {
+            const langObj = Lang.languages.find((item) => item.langCode == this.current);
+            return langObj?.name;
+        },
+        showFlag() {
+            return this.selected === "icon" || this.selected === "all";
+        },
+        showName() {
+            return this.selected === "text" || this.selected === "all";
         },
     },
     watch: {
