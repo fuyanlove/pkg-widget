@@ -1,16 +1,16 @@
 {
     "name": "@iruxu/pkg-widget",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "type": "module",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
         "preview": "vite preview",
-        "update": "npm install @iruxu/pkg-common@latest --registry=https://registry.npmjs.org"
+        "update": "npm install @iruxu/rx-common@latest --registry=https://registry.npmjs.org"
     },
     "dependencies": {
         "@element-plus/icons-vue": "^2.3.1",
-        "@iruxu/pkg-common": "^0.0.4",
+        "@iruxu/rx-common": "^0.1.0",
         "csslab": "^4.0.4",
         "element-plus": "^2.8.4",
         "flag-icons": "^7.2.3",
