@@ -27,7 +27,7 @@ export default {
         selected: {
             // icon text or all
             type: String,
-            default: "",
+            default: "icon",
         }
     },
     data() {
