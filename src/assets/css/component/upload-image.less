@@ -1,0 +1,78 @@
+/*
+ * @Author: iRuxu
+ * @Date: 2022-07-08 00:06:20
+ * @LastEditTime: 2022-07-13 18:55:51
+ * @Description:上传单个图片
+ */
+
+.w-upload-image {
+    display: inline-block;
+
+    .u-image {
+        .pr;
+        .size(148px);
+        img {
+            .size(100%);
+            .db;
+        }
+        .u-image-mask {
+            .pa;
+            .z(1);
+            .lt(0);
+            .size(100%);
+            background-color: rgba(0, 0, 0, 0.6);
+            .none;
+        }
+        .u-image-delete {
+            .pa;
+            .z(2);
+            .lt(0);
+            .size(100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .pointer;
+            font-style: normal;
+            img,
+            svg {
+                .size(15%);
+            }
+            .none;
+        }
+        &:hover {
+            .u-image-mask {
+                .db;
+            }
+            .u-image-delete {
+                display: flex;
+            }
+        }
+    }
+    .u-upload {
+        background-color: #fbfdff;
+        border: 1px dashed #c0ccda;
+        border-radius: 6px;
+        box-sizing: border-box;
+        width: 148px;
+        height: 148px;
+        cursor: pointer;
+        outline: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .u-upload-icon {
+        color: #8c939d;
+        font-style: normal;
+        font-size: 38px;
+        font-weight: 300;
+    }
+    .u-upload-input {
+        .none;
+    }
+
+    .is-circle {
+        border-radius: 50%;
+        overflow: hidden;
+    }
+}

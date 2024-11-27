@@ -1,22 +1,36 @@
 <template>
     <div id="app">
         <h1>IRuxu Pkg Widget</h1>
+        <Logo></Logo>
+
+        <UploadImage :upload-fn="uploadImage" :domain="domain" :url="avatar"></UploadImage>
     </div>
 </template>
 
 <script>
 import Logo from "./components/common/logo.vue";
+import UploadImage from "./components/common/upload-image.vue";
+import {upload} from "./assets/data/upload";
 export default {
     name: "App",
     components: {
         Logo,
+        UploadImage,
     },
     data() {
         return {
             app: "miipet",
             active: "sixth",
+
+            domain: "https://cdn.iruxu.com/",
+            avatar: "user/avatar/2024/11/27/81348085.jpeg"
         };
     },
+    methods: {
+        uploadImage(file) {
+            return upload(file)
+        }
+    }
 };
 </script>
 
