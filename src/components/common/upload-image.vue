@@ -38,8 +38,8 @@ export default {
         },
         defaultAvatar: {
             type: String,
-            required: true,
-            default: null,
+            required: false,
+            default: "",
         },
         size: {
             type: Array,
