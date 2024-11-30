@@ -27,6 +27,7 @@
 
 <script>
 import {buildOssSuffix} from "@iruxu/rx-common/utils/common";
+import cloneDeep from "lodash/cloneDeep";
 export default {
     name: "UploadImage",
     props: {
@@ -34,6 +35,11 @@ export default {
         url: {
             type: String,
             default: "",
+        },
+        defaultAvatar: {
+            type: String,
+            required: true,
+            default: null,
         },
         size: {
             type: Array,
@@ -89,7 +95,7 @@ export default {
     watch: {
         url: {
             handler: function (val) {
-                this.data = this.getAvatar(this.domain + val);
+                this.data = val && this.getAvatar(this.domain + val) || cloneDeep(this.defaultAvatar);
             },
             immediate: true,
         }
