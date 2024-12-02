@@ -47,7 +47,7 @@ export default {
         },
         shape: {
             type: String,
-            default: "circle",
+            default: "square",
         },
         uploadFn: {
             type: Function,
