@@ -4,6 +4,8 @@
         <Logo></Logo>
 
         <UploadImage :upload-fn="uploadImage" :domain="domain" :url="avatar"></UploadImage>
+
+        <langSelect selected="icon" :with-flag="false"></langSelect>
     </div>
 </template>
 
@@ -11,11 +13,13 @@
 import Logo from "./components/common/logo.vue";
 import UploadImage from "./components/common/upload-image.vue";
 import {upload} from "./assets/data/upload";
+import langSelect from "./components/common/lang-select.vue";
 export default {
     name: "App",
     components: {
         Logo,
         UploadImage,
+        langSelect
     },
     data() {
         return {

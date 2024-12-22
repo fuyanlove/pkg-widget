@@ -2,11 +2,12 @@
     <div class="c-lang-select">
         <div class="u-select-label">
             <span v-show="showFlag" class="fi u-flag" :class="flag"></span>
+            <img v-if="!showFlag" class="u-earth" src="../../assets/img/earth.svg" alt="">
             <span class="u-name" v-show="showName">{{ name }}</span>
         </div>
         <el-select class="u-select" v-model="current" popper-class="c-lang-select__pop" filterable :filter-method="filterMethod" @change="onLangChange">
             <el-option v-for="item in filterLanguages" :key="item.langCode" :label="item.name" :value="item.langCode">
-                <span class="fi" :class="`fi-${item.countryCode}`"></span>
+                <span class="fi" :class="`fi-${item.countryCode}`" v-if="optionsWithFlag"></span>
                 <span>{{ item.name }}</span>
             </el-option>
         </el-select>
@@ -24,11 +25,18 @@ export default {
             type: String,
             default: "en-US",
         },
-        selected: {
-            // icon text or all
-            type: String,
-            default: "icon",
-        }
+        showFlag: {
+            type: Boolean,
+            default: true,
+        },
+        showName: {
+            type: Boolean,
+            default: true,
+        },
+        optionsWithFlag: {
+            type: Boolean,
+            default: true,
+        },
     },
     data() {
         return {
@@ -50,12 +58,6 @@ export default {
         name() {
             const langObj = Lang.languages.find((item) => item.langCode == this.current);
             return langObj?.name;
-        },
-        showFlag() {
-            return this.selected === "icon" || this.selected === "all";
-        },
-        showName() {
-            return this.selected === "text" || this.selected === "all";
         },
     },
     watch: {
@@ -126,6 +128,10 @@ export default {
             box-sizing: border-box;
             box-shadow: 0 1px 0 0 #dcdfe6 inset, 0 -1px 0 0 #dcdfe6 inset, 0 0 0 1px #dcdfe6 inset;
         }
+    }
+
+    .u-earth {
+        height: 14px;
     }
 }
 .c-lang-select__pop {
