@@ -5,6 +5,16 @@ import vitePluginRequire from "vite-plugin-require";
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [vue(), vitePluginRequire.default()],
+    server: {
+        proxy: {
+            '/api': {
+                target: 'https://pay.2kog.com',
+                changeOrigin: true,
+                secure: false,
+                // 不需要 rewrite,保持完整路径
+            }
+        }
+    },
     css: {
         preprocessorOptions: {
             less: {

@@ -6,6 +6,8 @@
         <UploadImage :upload-fn="uploadImage" :domain="domain" :url="avatar"></UploadImage>
 
         <langSelect selected="icon" :with-flag="false"></langSelect>
+
+        <payDemo></payDemo>
     </div>
 </template>
 
@@ -14,12 +16,14 @@ import Logo from "./components/common/logo.vue";
 import UploadImage from "./components/common/upload-image.vue";
 import {upload} from "./assets/data/upload";
 import langSelect from "./components/common/lang-select.vue";
+import payDemo from "./components/common/pay-dialog-demo.vue";
 export default {
     name: "App",
     components: {
         Logo,
         UploadImage,
-        langSelect
+        langSelect,
+        payDemo
     },
     data() {
         return {
