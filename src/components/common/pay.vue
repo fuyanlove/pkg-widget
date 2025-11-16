@@ -127,7 +127,7 @@ export default {
         // 弹窗标题
         title: {
             type: String,
-            default: '支付中心',
+            default: payI18n.global.t('payment.title'),
         },
         // 弹窗宽度
         width: {
