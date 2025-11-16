@@ -84,7 +84,30 @@
 <script>
 import { Loading, CircleCheck } from '@element-plus/icons-vue';
 import QrcodeVue from "qrcode.vue";
-import { i18n } from '../../locale/index.js';
+import { createI18n } from "vue-i18n";
+import enUs from "../../locale/en-us";
+import zhCn from "../../locale/zh-cn";
+
+// 创建独立的 i18n 实例
+const getLocale = () => {
+    const _val = localStorage.getItem('lang');
+    if (!_val) {
+        return navigator.language;
+    } else {
+        return _val;
+    }
+}
+
+const payI18n = createI18n({
+    locale: getLocale(),
+    fallbackLocale: "zh-CN",
+    messages: {
+        "en-US": enUs,
+        "zh-CN": zhCn,
+    },
+    legacy: false, // 使用 Composition API 模式
+    warnHtmlInMessage: "off",
+});
 
 export default {
     name: "Payment",
@@ -93,6 +116,8 @@ export default {
         CircleCheck,
         QrcodeVue,
     },
+    // 使用独立的 i18n 实例
+    i18n: payI18n,
     props: {
         // 弹窗可见性
         modelValue: {
@@ -155,12 +180,12 @@ export default {
             }),
         },
     },
-    emits: ['update:modelValue', 'done', 'cancel'],
+    emits: ['update:modelValue', 'done', 'cancel', 'payment-success'],
     data() {
         return {
             visible: this.modelValue,
             loading: false,
-            loadingText: this.$t('payment.loading'),
+            loadingText: payI18n.global.t('payment.loading'),
 
             // 订单相关
             pendingOrderId: null, // 订单预处理ID
@@ -241,7 +266,7 @@ export default {
     methods: {
         // 翻译函数
         t(key) {
-            return this.$t(key);
+            return payI18n.global.t(key);
         },
 
         // 格式化价格
@@ -258,7 +283,7 @@ export default {
         async createOrder() {
             try {
                 this.loading = true;
-                this.loadingText = this.$t('payment.loadingCreate');
+                this.loadingText = payI18n.global.t('payment.loadingCreate');
 
                 // 准备订单数据
                 const orderParams = this.orderData || {
@@ -279,7 +304,6 @@ export default {
 
                 if (response && response.id) {
                     this.pendingOrderId = response.id;
-                    this.$emit('order-created', response);
 
                     // 开始轮询订单状态
                     this.startOrderPolling();
@@ -287,14 +311,14 @@ export default {
                     throw new Error('创建订单失败,未返回订单ID');
                 }
             } catch (err) {
-                this.$emit('error', { step: 'createOrder', error: err });
+                console.error('创建订单失败:', err);
                 this.loading = false;
             }
         },
 
         // 步骤2: 轮询订单预处理状态
         startOrderPolling() {
-            this.loadingText = this.$t('payment.loadingOrder');
+            this.loadingText = payI18n.global.t('payment.loadingOrder');
             this.pollingRetries = 0;
 
             this.orderPollingTimer = setInterval(async () => {
@@ -305,7 +329,7 @@ export default {
                     if (this.pollingRetries > this.pollingConfig.maxRetries) {
                         this.clearAllTimers();
                         this.loading = false;
-                        this.$emit('error', { step: 'polling', error: new Error('订单处理超时') });
+                        console.error('订单处理超时');
                         return;
                     }
 
@@ -321,15 +345,13 @@ export default {
                         this.paymentId = response.payment_id;
                         this.price = response.total_amount;
 
-                        this.$emit('order-ready', response);
-
                         // 自动获取默认支付方式(微信)的二维码
                         await this.getPaymentQrcode();
                     } else if (response && response.status === -1) {
                         // 订单处理失败
                         this.clearAllTimers();
                         this.loading = false;
-                        this.$emit('error', { step: 'order', error: new Error(response.message || '订单处理失败') });
+                        console.error('订单处理失败:', new Error(response.message || '订单处理失败'));
                     }
                 } catch (err) {
                     console.error('轮询订单状态失败:', err);
@@ -364,8 +386,6 @@ export default {
                     // this.skipUrl = response.skip_url || response.skipUrl; // 支付宝跳转链接
                     this.loading = false;
 
-                    this.$emit('qrcode-generated', response);
-
                     // 开始轮询支付状态
                     if (!this.paymentPollingTimer) {
                         this.startPaymentPolling();
@@ -375,7 +395,7 @@ export default {
                 }
             } catch (err) {
                 this.loading = false;
-                this.$emit('error', { step: 'getQrcode', error: err });
+                console.error('获取支付二维码失败:', err);
             }
         },
 
@@ -408,7 +428,7 @@ export default {
                     } else if (response && response.status === 'failed') {
                         this.clearTimer('payment');
                         this.warningVisible = true;
-                        this.$emit('payment-failed', response);
+                        console.error('支付失败:', response);
                     }
                 } catch (err) {
                     console.error('轮询支付状态失败:', err);
@@ -449,7 +469,7 @@ export default {
                     this.warningVisible = true;
                 }
             } catch (err) {
-                this.$emit('error', { step: 'checkPayment', error: err });
+                console.error('检查支付状态失败:', err);
             } finally {
                 this.checking = false;
             }
@@ -503,8 +523,6 @@ export default {
 @import "../../assets/css/var.less";
 
 .c-pay-pop {
-    width: 100%;
-    max-width: 100%;
 
     :deep(.el-dialog) {
         max-width: 980px;
