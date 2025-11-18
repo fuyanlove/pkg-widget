@@ -199,7 +199,7 @@ export default {
             paymentSuccess: false, // 支付是否成功
 
             // UI 相关
-            warningVisible: true, // 警告提示
+            warningVisible: false, // 警告提示
             checking: false, // 是否正在检查支付状态
 
             // 轮询定时器
