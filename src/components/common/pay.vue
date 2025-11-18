@@ -199,7 +199,7 @@ export default {
             paymentSuccess: false, // 支付是否成功
 
             // UI 相关
-            warningVisible: false, // 警告提示
+            warningVisible: true, // 警告提示
             checking: false, // 是否正在检查支付状态
 
             // 轮询定时器
@@ -698,10 +698,9 @@ export default {
                 }
 
                 .u-warning {
-                    margin-top: 10px;
                     width: 260px;
-                    margin-left: auto;
-                    margin-top: 16px;
+                    max-width: 100%;
+                    margin: 20px auto 0 auto;
                 }
             }
         }
