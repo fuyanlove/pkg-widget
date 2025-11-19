@@ -8,7 +8,7 @@ export default defineConfig({
     server: {
         proxy: {
             '/api': {
-                target: 'https://pay.2kog.com',
+                target: 'https://pay.dpying.com',
                 changeOrigin: true,
                 secure: false,
                 // 不需要 rewrite,保持完整路径

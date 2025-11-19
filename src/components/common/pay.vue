@@ -382,7 +382,7 @@ export default {
                 );
 
                 if (response) {
-                    this.qrcode = response;
+                    this.qrcode = response.qrcode;
                     // this.skipUrl = response.skip_url || response.skipUrl; // 支付宝跳转链接
                     this.loading = false;
 

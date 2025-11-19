@@ -6,7 +6,7 @@
         <UploadImage :upload-fn="uploadImage" :domain="domain" :url="avatar"></UploadImage>
 
         <langSelect selected="icon" :with-flag="false"></langSelect>
-
+        <pay></pay>
     </div>
 </template>
 
@@ -15,12 +15,14 @@ import Logo from "./components/common/logo.vue";
 import UploadImage from "./components/common/upload-image.vue";
 import {upload} from "./assets/data/upload";
 import langSelect from "./components/common/lang-select.vue";
+import pay from "./demo/pay-dialog-demo.vue";
 export default {
     name: "App",
     components: {
         Logo,
         UploadImage,
         langSelect,
+        pay
     },
     data() {
         return {
@@ -28,7 +30,9 @@ export default {
             active: "sixth",
 
             domain: "https://cdn.iruxu.com/",
-            avatar: "user/avatar/2024/11/27/81348085.jpeg"
+            avatar: "user/avatar/2024/11/27/81348085.jpeg",
+
+            show: true
         };
     },
     methods: {
