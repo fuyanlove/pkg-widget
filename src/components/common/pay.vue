@@ -28,7 +28,7 @@
                         </span>
                     </template>
                 </el-tab-pane>
-                <el-tab-pane :label="t('payment.alipay')" name="alipay" disabled>
+                <el-tab-pane :label="t('payment.alipay')" name="alipay">
                     <template #label>
                         <span class="u-tab">
                             <img src="../../assets/img/pay/alipay.svg" />
@@ -48,7 +48,32 @@
                 </div>
                 <div class="u-paybox">
                     <i class="u-qrcode" :class="{ 'u-wechat': isWepay, 'u-alipay': isAlipay }">
-                        <qrcode-vue v-if="qrcode" class="u-pic" :value="qrcode" :size="260" level="H"></qrcode-vue>
+                        <!-- 支付宝 PC 使用 iframe -->
+                        <iframe
+                            v-if="isAlipayPc && longUrl && !paymentSuccess"
+                            :src="longUrl"
+                            width="300"
+                            height="300"
+                            frameborder="0"
+                            class="u-iframe"
+                        ></iframe>
+
+                        <!-- 其他支付方式使用二维码 -->
+                        <qrcode-vue
+                            v-else-if="qrcode && !paymentSuccess"
+                            class="u-pic"
+                            :value="qrcode"
+                            :size="300"
+                            level="H"
+                        ></qrcode-vue>
+
+                        <!-- 支付成功提示(显示在二维码区域) -->
+                        <div v-else-if="paymentSuccess && isAlipayPc" class="u-success-inline">
+                            <el-icon color="#67c23a" :size="64"><CircleCheck /></el-icon>
+                            <p>{{ t('payment.success') }}</p>
+                        </div>
+
+                        <!-- 加载中 -->
                         <div v-else class="u-loading">
                             <el-icon class="is-loading"><Loading /></el-icon>
                             <p>{{ t('payment.loadingQrcode') }}</p>
@@ -194,7 +219,8 @@ export default {
 
             // 支付相关
             payType: this.payMode || 'wepay', // 当前支付方式: wepay/alipay
-            qrcode: null, // 支付二维码URL
+            qrcode: null, // 支付二维码URL或短链接
+            longUrl: null, // 支付宝长链接(用于 iframe)
             skipUrl: null, // 支付宝跳转链接
             paymentSuccess: false, // 支付是否成功
 
@@ -214,6 +240,25 @@ export default {
         },
         isAlipay() {
             return this.payType === 'alipay';
+        },
+        // 检测是否为移动设备
+        isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        },
+        // 实际使用的支付渠道
+        actualPayChannel() {
+            if (this.payType === 'wepay') {
+                return 'wepay';
+            }
+            // 支付宝根据设备类型选择渠道
+            if (this.payType === 'alipay') {
+                return this.isMobile ? 'alipay_wap' : 'alipay_pc';
+            }
+            return this.payType;
+        },
+        // 是否为 alipay_pc 模式
+        isAlipayPc() {
+            return this.actualPayChannel === 'alipay_pc';
         },
         params() {
             return {
@@ -364,6 +409,7 @@ export default {
         async onPayTypeChange(newPayType) {
             // 切换支付方式时重新获取二维码
             this.qrcode = null;
+            this.longUrl = null;
             this.skipUrl = null;
             await this.getPaymentQrcode();
         },
@@ -375,16 +421,33 @@ export default {
             }
 
             try {
+                // 构建请求 URL,使用实际支付渠道
+                let url = `/api/client/payment/item/${this.paymentId}/pay/${this.actualPayChannel}/qrcode`;
+
+                // 如果是 alipay_pc,添加 qr_pay_mode=4 参数
+                if (this.actualPayChannel === 'alipay_pc') {
+                    url += '?qr_pay_mode=4';
+                }
+
                 // 调用获取支付二维码接口
-                const response = await this.apiRequest(
-                    `/api/client/payment/item/${this.paymentId}/pay/${this.payType}/qrcode`,
-                    'GET'
-                );
+                const response = await this.apiRequest(url, 'GET');
 
                 if (response) {
-                    this.qrcode = response.qrcode;
-                    // this.skipUrl = response.skip_url || response.skipUrl; // 支付宝跳转链接
+                    // 根据支付渠道处理返回数据
+                    if (this.actualPayChannel === 'alipay_pc') {
+                        // PC 支付宝使用 long_url 显示 iframe
+                        this.longUrl = response.long_url || response.longUrl;
+                        this.qrcode = response.qrcode; // 备用
+                    } else {
+                        // 其他渠道使用 qrcode 生成二维码
+                        this.qrcode = response.qrcode || response;
+                        this.longUrl = response.long_url || response.longUrl;
+                    }
+
+                    this.skipUrl = response.skip_url || response.skipUrl; // 支付宝跳转链接
                     this.loading = false;
+
+                    this.$emit('qrcode-generated', response);
 
                     // 开始轮询支付状态
                     if (!this.paymentPollingTimer) {
@@ -504,6 +567,7 @@ export default {
         retry() {
             this.warningVisible = false;
             this.qrcode = null;
+            this.longUrl = null;
             this.skipUrl = null;
             this.pendingOrderId = null;
             this.paymentId = null;
@@ -630,8 +694,8 @@ export default {
                 text-align: center;
 
                 .u-qrcode {
-                    width: 260px;
-                    height: 260px;
+                    width: 300px;
+                    height: 300px;
                     display: block;
                     margin: 0 auto;
                     padding: 0;
@@ -643,6 +707,32 @@ export default {
                         width: 100%;
                         height: 100%;
                         display: block;
+                    }
+
+                    .u-iframe {
+                        display: block;
+                        border: none;
+                        width: 300px;
+                        height: 300px;
+                    }
+
+                    .u-success-inline {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        height: 100%;
+                        color: #67c23a;
+
+                        .el-icon {
+                            margin-bottom: 16px;
+                        }
+
+                        p {
+                            font-size: 18px;
+                            font-weight: 500;
+                            margin: 0;
+                        }
                     }
 
                     .u-loading {

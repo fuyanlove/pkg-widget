@@ -3,7 +3,8 @@
     <div class="demo">
         <h1>支付弹窗组件演示</h1>
 
-        <el-button type="primary" @click="openPayDialog">打开支付弹窗</el-button>
+        <el-button type="primary" @click="openPayDialog">打开支付弹窗(支付宝)</el-button>
+        <el-button type="success" @click="openWepayDialog" style="margin-left: 10px;">打开支付弹窗(微信)</el-button>
 
         <!-- 支付弹窗 -->
         <Payment
@@ -13,7 +14,7 @@
             :product-id="productId"
             :count="count"
             :product-desc="productDesc"
-            :pay-mode="'wepay'"
+            :pay-mode="payMode"
             :return-url="'/order/success'"
             :api-request="handleApiRequest"
             @done="onPaymentDone"
@@ -67,14 +68,22 @@ export default {
     data() {
         return {
             payVisible: false, // 支付弹窗显示状态
+            payMode: 'alipay', // 默认支付方式
             productId: 1,
             count: 1,
             productDesc: 'VIP会员 - 年度套餐',
         };
     },
     methods: {
-        // 打开支付弹窗
+        // 打开支付弹窗(支付宝)
         openPayDialog() {
+            this.payMode = 'alipay';
+            this.payVisible = true;
+        },
+
+        // 打开支付弹窗(微信)
+        openWepayDialog() {
+            this.payMode = 'wepay';
             this.payVisible = true;
         },
 
